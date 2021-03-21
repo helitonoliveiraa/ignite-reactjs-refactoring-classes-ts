@@ -5,14 +5,26 @@ import api from '../../services/api';
 import Food from '../../components/Food';
 import ModalAddFood from '../../components/ModalAddFood';
 import ModalEditFood from '../../components/ModalEditFood';
+
+import { FoodType } from '../../types';
+
 import { FoodsContainer } from './styles';
 
-class Dashboard extends Component {
-  constructor(props) {
+type EditingFood = Omit<FoodType, 'available'>
+
+type DashboardProps = {
+  foods: FoodType[];
+  editingFood: EditingFood;
+  modalOpen: boolean;
+  editModalOpen: boolean;
+};
+
+class Dashboard extends Component< {},DashboardProps> {
+  constructor(props: DashboardProps) {
     super(props);
     this.state = {
       foods: [],
-      editingFood: {},
+      editingFood: {} as EditingFood,
       modalOpen: false,
       editModalOpen: false,
     }
@@ -24,7 +36,7 @@ class Dashboard extends Component {
     this.setState({ foods: response.data });
   }
 
-  handleAddFood = async food => {
+  handleAddFood = async (food: FoodType) => {
     const { foods } = this.state;
 
     try {
@@ -39,7 +51,7 @@ class Dashboard extends Component {
     }
   }
 
-  handleUpdateFood = async food => {
+  handleUpdateFood = async (food: Omit<FoodType, 'id' | 'available'>) => {
     const { foods, editingFood } = this.state;
 
     try {
@@ -58,7 +70,7 @@ class Dashboard extends Component {
     }
   }
 
-  handleDeleteFood = async id => {
+  handleDeleteFood = async (id: number) => {
     const { foods } = this.state;
 
     await api.delete(`/foods/${id}`);
@@ -80,7 +92,7 @@ class Dashboard extends Component {
     this.setState({ editModalOpen: !editModalOpen });
   }
 
-  handleEditFood = food => {
+  handleEditFood = (food: FoodType) => {
     this.setState({ editingFood: food, editModalOpen: true });
   }
 

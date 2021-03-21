@@ -5,14 +5,26 @@ import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
 
-class ModalEditFood extends Component {
-  constructor(props) {
+import { FoodType } from '../../types';
+
+type EditFood = Omit<FoodType, 'available' | 'id'>;
+
+type ModalEditFoodProps = {
+  setIsOpen: () => void;
+  handleUpdateFood: (data: EditFood) => void;
+  editingFood: EditFood;
+  isOpen: boolean;
+};
+
+class ModalEditFood extends Component<ModalEditFoodProps, {}> {
+  formRef: any;
+  constructor(props: ModalEditFoodProps) {
     super(props);
 
     this.formRef = createRef()
   }
 
-  handleSubmit = async (data) => {
+  handleSubmit = async (data: EditFood) => {
     const { setIsOpen, handleUpdateFood } = this.props;
 
     handleUpdateFood(data);
